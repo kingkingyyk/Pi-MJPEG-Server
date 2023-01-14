@@ -24,6 +24,16 @@ ROTATE_V = 1
 STREAM_PORT = 8764
 # Configuration Ends #
 
+class StreamingOutput(io.BufferedIOBase):
+    def __init__(self):
+        self.frame = None
+        self.condition = Condition()
+
+    def write(self, buf):
+        with self.condition:
+            self.frame = buf
+            self.condition.notify_all()
+
 class Camera:
 
     def __init__(
@@ -73,17 +83,6 @@ class Camera:
 
     def down(self):
         self.api.stop_recording()
-
-class StreamingOutput(io.BufferedIOBase):
-    def __init__(self):
-        self.frame = None
-        self.condition = Condition()
-
-    def write(self, buf):
-        with self.condition:
-            self.frame = buf
-            self.condition.notify_all()
-
 
 app = Flask(__name__)
 
