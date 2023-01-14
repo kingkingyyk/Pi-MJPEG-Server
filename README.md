@@ -11,6 +11,7 @@ There is no security in this code to prevent any kind of attack. Consider implem
   - `sudo apt update`
   - `sudo apt upgrade -y`
   - `sudo apt dist-upgrade -y`
+  - `sudo apt install git`
 - Install Python packages with :
   - `sudo apt install python3-pip -y`
   - `sudo apt install python3-picamera2 --no-install-recommends`
@@ -18,10 +19,10 @@ There is no security in this code to prevent any kind of attack. Consider implem
 - `git clone https://github.com/kingkingyyk/Pi-MJPEG-Server.git`
 - `cd Pi-MJPEG-Server`
 - Update `mjpeg_server.py` if needed. There are some configurations available such as resolution.
-- Move python script to somewhere safe: `cp mjpeg_server.py /usr/local/bin`
-- Install required python packages: `python3 -m pip install -r requirements.txt`
+- Move python script to somewhere safe: `sudo cp mjpeg_server.py /usr/local/bin`
+- Install required python packages: `sudo python3 -m pip install -r requirements.txt`
 - Create an auto start service with: 
-  - `sudo mv mjpeg_server.service /etc/systemd/system`
+  - `sudo cp mjpeg_server.service /etc/systemd/system`
   - `sudo systemctl daemon-reload`
   - `sudo systemctl start mjpeg_server`
   - `sudo systemctl enable mjpeg_server`
@@ -33,7 +34,9 @@ There is no security in this code to prevent any kind of attack. Consider implem
 This code is tested on work with [motioneye](https://github.com/motioneye-project/motioneye). Just add this server url as network camera.
 
 ## Support
-The code is tested to work on Pi 4 + Camera Module v3. (~4% CPU usage for single connection, 1% more for every connection)
+The code is tested to work on :
+- Pi 4 + Camera Module v3 (~4% CPU usage for single connection, 1% more for every connection)
+- Pi Zero + Camera Module v1 (~60% CPU usage for single connection)
 
 ## Bonus
 If you use Pi Zero, you still can run this code, but run motioneye in a more powerful machine such as Pi 4 or x86 machine. This helps reducing the chance of throttling due to high temperature.
