@@ -1,0 +1,11 @@
+[Unit]
+Description=MJPEG server
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python3 /usr/local/bin/mjpeg_server.py
+
+[Install]
+WantedBy=multi-user.target
