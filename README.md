@@ -15,7 +15,7 @@ There is no security in this code to prevent any kind of attack. Consider implem
   - `sudo apt install python3-pip -y`
   - `sudo apt install python3-picamera2 --no-install-recommends`
 - Enable `I2C` via `raspi-config`
-- `git clone `https://github.com/kingkingyyk/Pi-MJPEG-Server.git`
+- `git clone https://github.com/kingkingyyk/Pi-MJPEG-Server.git`
 - `cd Pi-MJPEG-Server`
 - Update `mjpeg_server.py` if needed. There are some configurations available such as resolution.
 - Move python script to somewhere safe: `cp mjpeg_server.py /usr/local/bin`
