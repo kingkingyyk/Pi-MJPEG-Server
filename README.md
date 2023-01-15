@@ -36,7 +36,5 @@ This code is tested on work with [motioneye](https://github.com/motioneye-projec
 ## Support
 The code is tested to work on :
 - Pi 4 + Camera Module v3 (~4% CPU usage for single connection, 1% more for every connection)
-- Pi Zero + Camera Module v1 (~60% CPU usage for single connection)
-
-## Bonus
-If you use Pi Zero, you still can run this code, but run motioneye in a more powerful machine such as Pi 4 or x86 machine. This helps reducing the chance of throttling due to high temperature.
+- Pi Zero 2 W + Camera Module v1 (~35% CPU usage for single connection)
+- Pi Zero W + Camera Module v1 (~60% CPU usage for single connection)
