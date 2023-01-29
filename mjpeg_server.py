@@ -45,11 +45,13 @@ class Camera:
             rotate_h: bool,
             rotate_v: bool,
             autofocus: bool,
-            hdr: bool
+            hdr: bool,
+            hw_encode: bool,
     ):
         self.resolution = resolution
         self.fps = fps
         self.qf = qf
+        self.hw_encode = hw_encode
 
         self.controls = self._setup_controls(autofocus)
         self.api = self._get_api_object(rotate_h, rotate_v)
@@ -109,7 +111,7 @@ def index():
     return Response(get_img(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 output = StreamingOutput()
-camera = Camera(RESOLUTION, FPS, QF, ROTATE_H, ROTATE_V, AUTO_FOCUS, HDR)
+camera = Camera(RESOLUTION, FPS, QF, ROTATE_H, ROTATE_V, AUTO_FOCUS, HDR, HW_ENCODE)
 camera.up(output)
 
 try:
