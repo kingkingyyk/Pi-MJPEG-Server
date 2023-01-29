@@ -8,7 +8,7 @@ from typing import Dict, Tuple
 import libcamera
 from libcamera import controls
 from picamera2 import Picamera2
-from picamera2.encoders import MJPEGEncoder
+from picamera2.encoders import JpegEncoder, MJPEGEncoder
 from picamera2.outputs import FileOutput
 
 # Configuration Starts #
@@ -22,6 +22,7 @@ ROTATE_H = 1
 ROTATE_V = 1
 
 STREAM_PORT = 8764
+HW_ENCODE = False # Use Pi's SoC encoder, useful for low performance device like Pi Zero, but quality is not as good.
 # Configuration Ends #
 
 class StreamingOutput(io.BufferedIOBase):
@@ -79,7 +80,11 @@ class Camera:
 
     def up(self, output: StreamingOutput):
         res_qf = (RESOLUTION[0] * RESOLUTION[1]) / (1920 * 1080)
-        self.api.start_recording(MJPEGEncoder(int(self.fps*self.qf*res_qf*1024*1024)), FileOutput(output))
+        fps_qf = (30 / self.fps) * self.fps
+        bit_rate = int(fps_qf*self.qf*res_qf*1024*1024)
+        encoder = MJPEGEncoder(bit_rate) if self.hw_encode else JpegEncoder(bit_rate)
+
+        self.api.start_recording(MJPEGEncoder(encoder, FileOutput(output))
 
     def down(self):
         self.api.stop_recording()
