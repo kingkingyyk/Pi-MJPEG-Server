@@ -86,7 +86,7 @@ class Camera:
         bit_rate = int(fps_qf*self.qf*res_qf*1024*1024)
         encoder = MJPEGEncoder(bit_rate) if self.hw_encode else JpegEncoder(bit_rate)
 
-        self.api.start_recording(MJPEGEncoder(encoder, FileOutput(output))
+        self.api.start_recording(encoder, FileOutput(output))
 
     def down(self):
         self.api.stop_recording()
