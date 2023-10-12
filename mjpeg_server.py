@@ -3,7 +3,7 @@ import os
 
 from flask import Flask, Response
 from threading import Condition
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 import libcamera
 from libcamera import controls
@@ -23,6 +23,8 @@ ROTATE_V = 1
 
 STREAM_PORT = 8764
 HW_ENCODE = False # Use Pi's SoC encoder, useful for low performance device like Pi Zero, but quality is not as good.
+TUNING_FILE = None # Tuning files can be found here : /usr/share/libcamera/ipa/rpi
+
 # Configuration Ends #
 
 class StreamingOutput(io.BufferedIOBase):
@@ -47,11 +49,13 @@ class Camera:
             autofocus: bool,
             hdr: bool,
             hw_encode: bool,
+            tuning_file: Optional[str],
     ):
         self.resolution = resolution
         self.fps = fps
         self.qf = qf
         self.hw_encode = hw_encode
+        self.tuning_file = tuning_file
 
         self.controls = self._setup_controls(autofocus)
         self.api = self._get_api_object(rotate_h, rotate_v)
@@ -69,7 +73,11 @@ class Camera:
         return data
 
     def _get_api_object(self, rotate_h: bool, rotate_v: bool):
-        api_obj = Picamera2()
+        extra_args = {}
+        if self.tuning_file:
+            extra_args['tuning'] = Picamera2.load_tuning_file(self.tuning_file)
+
+        api_obj = Picamera2(**extra_args)
         api_obj.configure(api_obj.create_video_configuration(
             main={"size": self.resolution},
             controls=self.controls,
@@ -111,7 +119,7 @@ def index():
     return Response(get_img(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 output = StreamingOutput()
-camera = Camera(RESOLUTION, FPS, QF, ROTATE_H, ROTATE_V, AUTO_FOCUS, HDR, HW_ENCODE)
+camera = Camera(RESOLUTION, FPS, QF, ROTATE_H, ROTATE_V, AUTO_FOCUS, HDR, HW_ENCODE, TUNING_FILE)
 camera.up(output)
 
 try:
