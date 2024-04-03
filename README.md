@@ -34,7 +34,8 @@ There is no security in this code to prevent any kind of attack. Consider implem
 This code is tested on work with [motioneye](https://github.com/motioneye-project/motioneye). Just add this server url as network camera.
 
 ## Support
-The code (HW encode enabled) is tested to work on :
-- Pi 4 + Camera Module v3 (~4% CPU usage for single connection, 1% more for every connection)
-- Pi Zero 2 W + Camera Module v1 (~35% CPU usage for single connection)
-- Pi Zero W + Camera Module v1 (~60% CPU usage for single connection)
+The code  is tested to work on :
+- Pi 5 `SW Encode` + Camera Module v3 (~85% CPU usage for single connection)
+- Pi 4 `HW Encode` + Camera Module v3 (~4% CPU usage for single connection, 1% more for every connection)
+- Pi Zero 2 W `HW Encode` + Camera Module v1 (~35% CPU usage for single connection)
+- Pi Zero W `HW Encode` + Camera Module v1 (~60% CPU usage for single connection)
