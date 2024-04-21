@@ -14,7 +14,7 @@ from picamera2.outputs import FileOutput
 # Configuration Starts #
 RESOLUTION = (1920, 1080)
 FPS = 24
-QF = 1 # Quality factor
+QF = 0.8 # Quality factor
 
 AUTO_FOCUS = True
 HDR = True
@@ -57,19 +57,22 @@ class Camera:
         self.hw_encode = hw_encode
         self.tuning_file = tuning_file
 
-        self.controls = self._setup_controls(autofocus)
+        self.controls = self._setup_controls(autofocus, hdr)
         self.api = self._get_api_object(rotate_h, rotate_v)
 
-        if hdr:
-            os.system('v4l2-ctl --set-ctrl wide_dynamic_range=1 -d /dev/v4l-subdev0')
-
-    def _setup_controls(self, autofocus: bool) -> Dict:
+    def _setup_controls(self, autofocus: bool, hdr: bool) -> Dict:
         base_speed = 1000000 # 1 second
         data = {
             "FrameDurationLimits": (int(base_speed/(2*self.fps)), base_speed) # Shutter speed ranges from 1/2*FPS to 1 sec
         }
+        data["AeMeteringMode"] = controls.AeMeteringModeEnum.Matrix
         if autofocus:
             data["AfMode"] = controls.AfModeEnum.Continuous
+        if hdr:
+            data["HdrMode"] = controls.HdrModeEnum.SingleExposure
+            data["NoiseReductionMode"] = controls.draft.NoiseReductionModeEnum.HighQuality
+        else:
+            data["HdrMode"] = controls.HdrModeEnum.Off
         return data
 
     def _get_api_object(self, rotate_h: bool, rotate_v: bool):
@@ -122,7 +125,8 @@ output = StreamingOutput()
 camera = Camera(RESOLUTION, FPS, QF, ROTATE_H, ROTATE_V, AUTO_FOCUS, HDR, HW_ENCODE, TUNING_FILE)
 camera.up(output)
 
-try:
-    app.run(host='0.0.0.0', port=STREAM_PORT, threaded=True)
-finally:
-    camera.down()
+if __name__ == "__main__":
+    try:
+        app.run(host='0.0.0.0', port=STREAM_PORT, threaded=True)
+    finally:
+        camera.down()

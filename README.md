@@ -20,7 +20,7 @@ There is no security in this code to prevent any kind of attack. Consider implem
 - `cd Pi-MJPEG-Server`
 - Update `mjpeg_server.py` if needed. There are some configurations available such as resolution.
 - Move python script to somewhere safe: `sudo cp mjpeg_server.py /usr/local/bin`
-- Install required python packages: `sudo python3 -m pip install -r requirements.txt`
+- Install required python packages: `sudo python3 -m pip install --break-system-packages -r requirements.txt`
 - Create an auto start service with: 
   - `sudo cp mjpeg_server.service /etc/systemd/system`
   - `sudo systemctl daemon-reload`

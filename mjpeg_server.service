@@ -5,7 +5,8 @@ After=multi-user.target
 [Service]
 Type=simple
 Restart=always
-ExecStart=/usr/bin/python3 /usr/local/bin/mjpeg_server.py
+WorkingDirectory=/usr/local/bin
+ExecStart=/usr/local/bin/gunicorn mjpeg_server:app -b 0.0.0.0:8764 -w 1 -k gevent
 
 [Install]
 WantedBy=multi-user.target
